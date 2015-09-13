@@ -83,9 +83,10 @@ float Camera::getZoomLevel()
 
 void Camera::zoomIn()
 {
-	this->zoomLevel +=0.5;
+	this->zoomLevel +=0.125;
+
 }
 void Camera::zoomOut()
 {
-	this->zoomLevel -=0.5;
+	this->zoomLevel -=0.125;
 }

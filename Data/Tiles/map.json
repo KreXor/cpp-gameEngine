@@ -1,8 +1,8 @@
 {
     
     "tile_count": 10000,
-    "tile_set": "Data/Tiles/NewTiles.bmp",
-    "tile_size": 24,
+    "tile_set": "Data/Tiles/Tiles.bmp",
+    "tile_size": 48,
     
     "content_legend": [
         "CONTENT_TYPE_NONE",
@@ -40228,33 +40228,33 @@
 	},
 	{
 	    "type": "TILE_TYPE_EDGE",
-	    "image_x":24,
-	    "image_y":0
-	},
-	{
-	    "type": "TILE_TYPE_FLOOR",
 	    "image_x":48,
 	    "image_y":0
 	},
 	{
+	    "type": "TILE_TYPE_FLOOR",
+	    "image_x":96,
+	    "image_y":0
+	},
+	{
 	    "type": "TILE_TYPE_CORRIDOOR",
-	    "image_x":72,
+	    "image_x":144,
 	    "image_y":0
 	},
 	{
 	    "type": "TILE_TYPE_WALL",
 	    "image_x":0,
-	    "image_y":24
+	    "image_y":48
 	},
 	{
 	    "type": "TILE_TYPE_WALL_HARD",
-	    "image_x":24,
-	    "image_y":24
+	    "image_x":48,
+	    "image_y":48
 	},
 	{
 	    "type": "TILE_TYPE_HAZARD",
-	    "image_x":48,
-	    "image_y":24
+	    "image_x":96,
+	    "image_y":48
 	}      
     ]
 }
