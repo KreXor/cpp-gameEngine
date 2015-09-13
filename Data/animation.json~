@@ -1,5 +1,5 @@
 {
-	"sprite_set": "Data/Player/player.bmp",
+	"sprite_set": "Data/Player/newplayer.bmp",
 	"animations": [
 		{
 			"name": "still",
@@ -9,9 +9,9 @@
 				{
 					"frame": 0,
 					"pos_x": 0,
-					"pos_y": 0,
-					"width": 42,
-					"height": 70
+					"pos_y": 275,
+					"width": 32,
+					"height": 55
 				}
 			]
 		},
@@ -23,30 +23,30 @@
 				{
 					"frame": 0,
 					"pos_x": 0,
-					"pos_y": 70,
-					"width": 42,
-					"height": 70
+					"pos_y": 55,
+					"width": 32,
+					"height": 55
 				},
 				{
 					"frame": 1,
-					"pos_x": 42,
-					"pos_y": 70,
-					"width": 42,
-					"height": 70
+					"pos_x": 32,
+					"pos_y": 55,
+					"width": 32,
+					"height": 55
 				},
 				{
 					"frame": 2,
-					"pos_x": 84,
-					"pos_y": 70,
-					"width": 42,
-					"height": 70
+					"pos_x": 64,
+					"pos_y": 55,
+					"width": 32,
+					"height": 55
 				},
 				{
 					"frame": 3,
-					"pos_x": 125,
-					"pos_y": 70,
-					"width": 42,
-					"height": 70
+					"pos_x": 96,
+					"pos_y": 55,
+					"width": 32,
+					"height": 55
 				}
 			]
 		},
@@ -58,33 +58,69 @@
 				{
 					"frame": 0,
 					"pos_x": 0,
-					"pos_y": 140,
-					"width": 42,
-					"height": 70
+					"pos_y": 220,
+					"width": 32,
+					"height": 55
 				},
 				{
 					"frame": 1,
-					"pos_x": 42,
-					"pos_y": 140,
-					"width": 42,
-					"height": 70
+					"pos_x": 32,
+					"pos_y": 220,
+					"width": 32,
+					"height": 55
 				},
 				{
 					"frame": 2,
-					"pos_x": 84,
-					"pos_y": 140,
-					"width": 42,
-					"height": 70
+					"pos_x": 62,
+					"pos_y": 220,
+					"width": 32,
+					"height": 55
 				},
 				{
 					"frame": 3,
-					"pos_x": 125,
-					"pos_y": 140,
-					"width": 42,
-					"height": 70
+					"pos_x": 96,
+					"pos_y": 220,
+					"width": 32,
+					"height": 55
+				}
+			]
+		},
+		{
+			"name": "walk-down",
+			"framerate": 150,
+			"framecount": 4,
+			"frames": [
+				{
+					"frame": 0,
+					"pos_x": 0,
+					"pos_y": 0,
+					"width": 32,
+					"height": 55
+				},
+				{
+					"frame": 1,
+					"pos_x": 32,
+					"pos_y": 0,
+					"width": 32,
+					"height": 55
+				},
+				{
+					"frame": 2,
+					"pos_x": 62,
+					"pos_y": 0,
+					"width": 32,
+					"height": 55
+				},
+				{
+					"frame": 3,
+					"pos_x": 96,
+					"pos_y": 0,
+					"width": 32,
+					"height": 55
 				}
 			]
 		}
+
 
 	]
 }

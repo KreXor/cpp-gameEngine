@@ -40,6 +40,12 @@ void PlayingState::Resume()
 void PlayingState::HandleEvents(GameEngine* game)
 {
 	inputHandler.CheckInput(game);
+}
+
+void PlayingState::Update(GameEngine* game)
+{
+
+	game->camera.update(game->millisecondFTime);
 
 	if(inputHandler.keyRunRight.pressed == true){
         player.offset_x -= player.movmentSpeed;
@@ -64,7 +70,7 @@ void PlayingState::HandleEvents(GameEngine* game)
     else if(inputHandler.keyRunDown.pressed == true){
         player.offset_y -= player.movmentSpeed;
         player.direction = -1;
-        player.sprite->SetCurrentBehaviour(3);
+        player.sprite->SetCurrentBehaviour(4);
     }
     else
 	{
@@ -72,12 +78,6 @@ void PlayingState::HandleEvents(GameEngine* game)
 		player.direction = 0;
 		player.sprite->SetCurrentBehaviour(1);
 	}
-}
-
-void PlayingState::Update(GameEngine* game)
-{
-
-	game->camera.update(game->millisecondFTime);
 
 }
 
