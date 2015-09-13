@@ -3,7 +3,7 @@
 
 #include "SDL2/SDL.h"
 #include "GameEngine.h"
-#include "State.h"
+#include "States/State.h"
 #include "SDL2/SDL_ttf.h"
 
 
@@ -51,14 +51,11 @@ void GameEngine::Init(const char* title, int width, int height,
 
 void GameEngine::Cleanup()
 {
-	// cleanup the all states
 	while ( !states.empty() ) {
 		states.back()->Cleanup();
 		states.pop_back();
 	}
 
-	// switch back to windowed mode so other
-	// programs won't get accidentally resized
 	if ( m_fullscreen ) {
 		SDL_Window* window = SDL_CreateWindow("Maximized text",
                                       SDL_WINDOWPOS_UNDEFINED,
@@ -70,45 +67,38 @@ void GameEngine::Cleanup()
 		screen = SDL_GetWindowSurface(window);
 	}
 
-
-	// shutdown SDL
 	SDL_Quit();
 }
 
 void GameEngine::ChangeState(State* state)
 {
-	// cleanup the current state
 	if ( !states.empty() ) {
 		states.back()->Cleanup();
 		states.pop_back();
 	}
 
-	// store and init the new state
 	states.push_back(state);
 	states.back() ->Init(this);
 }
 
 void GameEngine::PushState(State* state)
 {
-	// pause current state
+
 	if ( !states.empty() ) {
 		states.back()->Pause();
 	}
 
-	// store and init the new state
 	states.push_back(state);
 	states.back()->Init(this);
 }
 
 void GameEngine::PopState()
 {
-	// cleanup the current state
 	if ( !states.empty() ) {
 		states.back()->Cleanup();
 		states.pop_back();
 	}
 
-	// resume previous state
 	if ( !states.empty() ) {
 		states.back()->Resume();
 	}
