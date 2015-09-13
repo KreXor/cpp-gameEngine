@@ -1,16 +1,13 @@
 #include "InputHandler.h"
+#include <iostream>
 
-
-void InputHandler::Init(Player* player, Map* map)
+void InputHandler::Init()
 {
-	this->map = map;
-	this->player = player;
-
-	keyJump = SDLK_UP;
-	keyRunLeft = SDLK_LEFT;
-	keyRunRight = SDLK_RIGHT;
-	keyDuck = SDLK_DOWN;
-	KeyEscape = SDLK_ESCAPE;
+	keyRunUp.keycode = SDLK_UP;
+	keyRunLeft.keycode = SDLK_LEFT;
+	keyRunRight.keycode = SDLK_RIGHT;
+	keyRunDown.keycode = SDLK_DOWN;
+	KeyEscape.keycode = SDLK_ESCAPE;
 
 }
 void InputHandler::CheckInput(GameEngine* game)
@@ -33,20 +30,6 @@ void InputHandler::CheckInput(GameEngine* game)
 
 
 		}
-	/*
-	const Uint8 *keystate = SDL_GetKeyboardState(NULL);
-	SDL_Event e;
-	while (SDL_PollEvent(&e)){
-		//CheckPlayerMovement(keystate);
-
-		if(keystate[KeyEscape]){
-			SDL_Quit();
-			exit(1);
-		}
-	}*/
-
-	//this->physics.ApplyPhysicsOnPlayer(player, *map);
-
 }
 
 void InputHandler::CheckPlayerMovement(SDL_Event* event, GameEngine* game)
@@ -54,28 +37,19 @@ void InputHandler::CheckPlayerMovement(SDL_Event* event, GameEngine* game)
 
 	if (event->type == SDL_KEYDOWN)
 	{
-		Player tempPlayer = *player;
-		if(event->key.keysym.sym == keyRunRight){
-			player->direction = 1;
-			player->sprite->SetCurrentBehaviour(2);
-			game->camera.moveCameraTo(-150,0,1000);
+		if(event->key.keysym.sym == keyRunRight.keycode){
+            keyRunRight.pressed = true;
 		}
 
-		else if(event->key.keysym.sym == keyRunLeft){
-			player->direction = -1;
-			player->sprite->SetCurrentBehaviour(2);
-			game->camera.moveCameraTo(150,0,1000);
+		if(event->key.keysym.sym == keyRunLeft.keycode){
+            keyRunLeft.pressed = true;
 		}
-		else if(event->key.keysym.sym == keyJump){
-			//if(player->inAir == false)
-			//{
-				player->currentFallingSpeed = -10;
-				player->sprite->SetCurrentBehaviour(3);
-			//}
+		if(event->key.keysym.sym == keyRunUp.keycode){
+			keyRunUp.pressed = true;
 
 		}
-		else if(event->key.keysym.sym == keyDuck){
-			player->sprite->SetCurrentBehaviour(4);
+		if(event->key.keysym.sym == keyRunDown.keycode){
+			keyRunDown.pressed = true;
 		}
 
 		if(event->key.keysym.sym == SDLK_KP_PLUS)
@@ -92,12 +66,24 @@ void InputHandler::CheckPlayerMovement(SDL_Event* event, GameEngine* game)
 			exit(1);
 		}
 	}
-	else
+	if (event->type == SDL_KEYUP)
 	{
-		//game->camera.moveCameraTo(0,0,5000);
-		player->direction = 0;
-		player->sprite->SetCurrentBehaviour(1);
+		if(event->key.keysym.sym == keyRunRight.keycode){
+            keyRunRight.pressed = false;
+		}
+
+		if(event->key.keysym.sym == keyRunLeft.keycode){
+            keyRunLeft.pressed = false;
+		}
+		if(event->key.keysym.sym == keyRunUp.keycode){
+			keyRunUp.pressed = false;
+
+		}
+		if(event->key.keysym.sym == keyRunDown.keycode){
+			keyRunDown.pressed = false;
+		}
 	}
+
 
 
 }

@@ -13,17 +13,23 @@ private:
 	Map* map;
 	Physics physics;
 
-	SDL_Keycode keyJump;
-	SDL_Keycode keyRunLeft;
-	SDL_Keycode keyRunRight;
-	SDL_Keycode keyDuck;
-	SDL_Keycode KeyEscape;
+    struct key{
+		bool pressed = false;
+		SDL_Keycode keycode;
+	};
+
 
 
 	void CheckPlayerMovement(SDL_Event* event, GameEngine* game);
 public:
-	void Init(Player* player, Map* map);
+	void Init();
 	void CheckInput(GameEngine* game);
+
+	key keyRunUp;
+	key keyRunLeft;
+	key keyRunRight;
+	key keyRunDown;
+	key KeyEscape;
 
 };
 #endif

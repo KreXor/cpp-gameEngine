@@ -37,6 +37,8 @@ void Map::readMapData(GameEngine* game)
     Document document;
     document.Parse(buffer);
 
+
+
     Tile tile;
 	int count = 0;
 
@@ -48,14 +50,14 @@ void Map::readMapData(GameEngine* game)
     this->tilesImage[0] = Load_image(tile_set, game);
 
     const Value& a = document["grid"];
-    assert(a.IsArray());
+   // assert(a.IsArray());
 
 
     mapTilePosition = new Tile[this->tilesCount];
 
     for (SizeType i = 0; i < a.Size(); i++)
     {
-        assert(a[i].IsArray());
+       // assert(a[i].IsArray());
         for (SizeType j = 0; j < a[i].Size(); j++)
         {
             int type_id = a[i][j]["type"].GetInt();

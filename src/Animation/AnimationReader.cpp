@@ -14,7 +14,7 @@ AnimationReader::AnimationReader(string path)
 Sprite* AnimationReader::LoadAnimations(string filename, GameEngine* game)
 {
 	this->sprite = new Sprite();
-	string path;
+
 	int frameRate;
 	int frameCount;
 
@@ -43,7 +43,7 @@ Sprite* AnimationReader::LoadAnimations(string filename, GameEngine* game)
     Document document;
     document.Parse(buffer);
 
-    path = document["sprite_set"].GetString();
+    string path = document["sprite_set"].GetString();
 
     const Value& a = document["animations"];
     assert(a.IsArray());
@@ -81,74 +81,6 @@ Sprite* AnimationReader::LoadAnimations(string filename, GameEngine* game)
     delete[] buffer;
 
 	return this->sprite;
-/*	if(fileReader.FindLine("<Type("+type+")>")){
-
-
-		path = fileReader.CheckLineReturnValue("Path");
-
-		while(true)
-		{
-			str = fileReader.GetLine();
-			str = fileReader.RemoveBlanc(str);
-
-			str = fileReader.RemoveCharAfter(':', str);
-			if(str.compare("<Animation>") == 0 ){
-
-				//Get FrameRate
-				frameRate = fileReader.CheckLineReturnValue("FrameRate");
-
-				//Get FrameCount
-				frameCount = fileReader.CheckLineReturnValue("FrameCount");
-
-				animation = new Animation();
-					if(animation == NULL)	{
-					delete animation;
-					}
-				animation->Init(atoi(frameCount.c_str()), atoi(frameRate.c_str()), path, game);
-
-				for(int i = 0; i < atoi(frameCount.c_str()); i++)
-				{
-					str = fileReader.GetLine();
-					str = fileReader.RemoveBlanc(str);
-
-
-
-					tempstr = fileReader.RemoveCharAfter(',', str);
-					frame = atoi(tempstr.c_str());
-					str = fileReader.RemoveCharUntil(',', str);
-
-					tempstr = fileReader.RemoveCharAfter(',', str);
-					x = atoi(tempstr.c_str());
-					str = fileReader.RemoveCharUntil(',', str);
-
-					tempstr = fileReader.RemoveCharAfter(',', str);
-					y = atoi(tempstr.c_str());
-					str = fileReader.RemoveCharUntil(',', str);
-
-					tempstr = fileReader.RemoveCharAfter(',', str);
-					w = atoi(tempstr.c_str());
-					str = fileReader.RemoveCharUntil(',', str);
-
-					tempstr = fileReader.RemoveCharAfter(',', str);
-					h = atoi(tempstr.c_str());
-					str = fileReader.RemoveCharUntil(',', str);
-
-					animation->SetFrame(frame, x, y, w, h);
-				}
-
-				this->sprite->AddAnimation(animation, animationCount);
-
-			}
-			else
-				break;
-
-			animationCount++;
-		}
-	}*/
-
-	return this->sprite;
-
-
 }
 
 
