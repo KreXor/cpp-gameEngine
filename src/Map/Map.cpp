@@ -37,12 +37,8 @@ void Map::readMapData(GameEngine* game)
     Document document;
     document.Parse(buffer);
 
-
-
     Tile tile;
 	int count = 0;
-
-	this->tilesCount = 6259;
 
     string tile_set = document["tile_set"].GetString();
     int tile_size = document["tile_size"].GetInt();
