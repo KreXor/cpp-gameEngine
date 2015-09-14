@@ -78,25 +78,14 @@ Sprite* AnimationReader::LoadAnimations(string filename, GameEngine* game)
 
         for (SizeType i = 0; i < a.Size(); i++)
         {
-            if(!a[i].HasMember("framerate"))
+            if(!a[i].HasMember("framerate") || !a[i].HasMember("framecount") || !a[i].HasMember("frames"))
             {
-                cout << "failed to animation (" << filename << ")! has no member framerate\n";
+                cout << "failed to animation (" << filename << ")! has no member framerate, framecount or frames\n";
                 return this->sprite;
             }
-            else if(!a[i]["framerate"].IsInt())
+            else if(!a[i]["framerate"].IsInt() || !a[i]["framecount"].IsInt() || !a[i]["frames"].IsArray())
             {
-                cout << "failed to animation (" << filename << ")! member framerate is not an int\n";
-                return this->sprite;
-            }
-
-            if(!a[i].HasMember("framecount"))
-            {
-                cout << "failed to animation (" << filename << ")! has no member framecount\n";
-                return this->sprite;
-            }
-            else if(!a[i]["framecount"].IsInt())
-            {
-                cout << "failed to animation (" << filename << ")! member framecount is not an int\n";
+                cout << "failed to animation (" << filename << ")! member framerate, framecount or frames is not an int or array\n";
                 return this->sprite;
             }
 
@@ -113,6 +102,17 @@ Sprite* AnimationReader::LoadAnimations(string filename, GameEngine* game)
 
             for (SizeType j = 0; j < a[i]["frames"].Size(); j++)
             {
+
+                if(!a[i]["frames"][j].HasMember("frame") || !a[i]["frames"][j].HasMember("pos_x") || !a[i]["frames"][j].HasMember("pos_y") || !a[i]["frames"][j].HasMember("width") || !a[i]["frames"][j].HasMember("height"))
+                {
+                    cout << "failed to animation (" << filename << ")! missing member in frames array\n";
+                    return this->sprite;
+                }
+                else if(!a[i]["frames"][j]["frame"].IsInt() || !a[i]["frames"][j]["pos_x"].IsInt() || !a[i]["frames"][j]["pos_y"].IsInt() || !a[i]["frames"][j]["width"].IsInt() || !a[i]["frames"][j]["height"].IsInt())
+                {
+                    cout << "failed to animation (" << filename << ")! member under frames is not valid\n";
+                    return this->sprite;
+                }
                 frame = a[i]["frames"][j]["frame"].GetInt();
                 x = a[i]["frames"][j]["pos_x"].GetInt();
                 y = a[i]["frames"][j]["pos_y"].GetInt();

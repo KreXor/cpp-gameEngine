@@ -110,7 +110,30 @@ void Map::readMapData(GameEngine* game)
             {
                 for (SizeType j = 0; j < a[i].Size(); j++)
                 {
+                    if(!a[i][j].HasMember("type"))
+                    {
+                        cout << "failed to load map! tile misses members\n";
+                        return;
+                    }
+                    else if(!a[i][j]["type"].IsInt())
+                    {
+                        cout << "failed to load map! tiles members is not correct format\n";
+                        return;
+                    }
+
                     int type_id = a[i][j]["type"].GetInt();
+
+                    if(!document["type_legend"][type_id].HasMember("image_x") || !document["type_legend"][type_id].HasMember("image_y"))
+                    {
+                        cout << "failed to load map! tile misses members\n";
+                        return;
+                    }
+                    else if(!document["type_legend"][type_id]["image_x"].IsInt() || !document["type_legend"][type_id]["image_y"].IsInt())
+                    {
+                        cout << "failed to load map! tiles members is not correct format\n";
+                        return;
+                    }
+
                     tile.worldPosition.x = j*tile_size;
                     tile.worldPosition.y = i*tile_size;
                     tile.imagePosition.x = document["type_legend"][type_id]["image_x"].GetInt();

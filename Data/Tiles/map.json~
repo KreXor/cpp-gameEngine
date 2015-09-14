@@ -2,7 +2,7 @@
     
     "tile_count": 10000,
     "tile_set": "Data/Tiles/Tiles.bmp",
-    "tile_size": "48",
+    "tile_size": 48,
     
     "content_legend": [
         "CONTENT_TYPE_NONE",
@@ -50,7 +50,7 @@
             },
             {
                 "content": 0,
-                "type": 1
+                "type": "1"
             },
             {
                 "content": 0,
