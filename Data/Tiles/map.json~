@@ -1,8 +1,8 @@
 {
     
     "tile_count": 10000,
-    "tile_set": "Data/Tiles/NewTiles.bmp",
-    "tile_size": 24,
+    "tile_set": "Data/Tiles/Tiles.bmp",
+    "tile_size": "48",
     
     "content_legend": [
         "CONTENT_TYPE_NONE",

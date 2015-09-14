@@ -9,7 +9,7 @@
 				{
 					"frame": 0,
 					"pos_x": 0,
-					"pos_y": 275,
+					"pos_y": 220,
 					"width": 32,
 					"height": 55
 				}
@@ -58,28 +58,28 @@
 				{
 					"frame": 0,
 					"pos_x": 0,
-					"pos_y": 220,
+					"pos_y": 165,
 					"width": 32,
 					"height": 55
 				},
 				{
 					"frame": 1,
 					"pos_x": 32,
-					"pos_y": 220,
+					"pos_y": 165,
 					"width": 32,
 					"height": 55
 				},
 				{
 					"frame": 2,
 					"pos_x": 62,
-					"pos_y": 220,
+					"pos_y": 165,
 					"width": 32,
 					"height": 55
 				},
 				{
 					"frame": 3,
 					"pos_x": 96,
-					"pos_y": 220,
+					"pos_y": 165,
 					"width": 32,
 					"height": 55
 				}
