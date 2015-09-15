@@ -47,6 +47,8 @@ void GameEngine::Init(const char* title, int width, int height,
 	m_fullscreen = fullscreen;
 	m_running = true;
 
+	camera.init(screenWidth, screenHeigth);
+
 }
 
 void GameEngine::Cleanup()

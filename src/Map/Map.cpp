@@ -160,15 +160,15 @@ void Map::readMapData(GameEngine* game)
     }
 
 }
-void Map::Draw(GameEngine* game, float x_offset, float y_offset)
+void Map::Draw(GameEngine* game)
 {
 	SDL_Rect rect;
 	SDL_Rect rect2;
 
 	for(int i = 0; i < this->tilesCount; i++)
 	{
-		rect.x = this->mapTilePosition[i].worldPosition.x*game->camera.getZoomLevel() + x_offset;
-		rect.y = this->mapTilePosition[i].worldPosition.y*game->camera.getZoomLevel() + y_offset;
+		rect.x = this->mapTilePosition[i].worldPosition.x*game->camera.getZoomLevel() + game->camera.getXPosition();
+		rect.y = this->mapTilePosition[i].worldPosition.y*game->camera.getZoomLevel() + game->camera.getYPosition();
 		rect.w = this->mapTilePosition[i].t_size*game->camera.getZoomLevel();
 		rect.h = this->mapTilePosition[i].t_size*game->camera.getZoomLevel();
 

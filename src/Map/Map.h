@@ -34,7 +34,7 @@ public:
 	int tilesCount;
 	Tile* mapTilePosition;
 	void LoadMap(GameEngine* game);
-	void Draw(GameEngine* game, float x_offset, float y_offset);
+	void Draw(GameEngine* game);
 
 
 

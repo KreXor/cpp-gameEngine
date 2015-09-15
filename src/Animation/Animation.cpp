@@ -56,8 +56,8 @@ void Animation::Draw(SDL_Rect* position, GameEngine* game, float gameTime, int d
 {
 	timeSinceLastFrame += gameTime;
 	SDL_Rect* frame = GetFrame();
-	position->h = frame->h;
-	position->w =frame->w;
+	position->h = frame->h*game->camera.getZoomLevel();
+	position->w =frame->w*game->camera.getZoomLevel();
 
 	if(direction == 1)
 	{

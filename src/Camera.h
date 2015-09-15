@@ -19,8 +19,11 @@ private:
 	float moveToTargetTime;
 
 	float zoomLevel;
+	int screen_width;
+	int screen_height;
 
 public:
+    void init(int w, int h);
 	void update(float millisecondFTime);
 	void reset();
 	void setPosition(float x, float y);
@@ -30,6 +33,7 @@ public:
 	float getZoomLevel();
 	void zoomIn();
 	void zoomOut();
+	void setFocus(float x, float y);
 
 	void addCameraShake(float strength, int time);
 	void moveCameraTo(float x, float y, int time);

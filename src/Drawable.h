@@ -27,8 +27,8 @@ public:
 	int direction;
 
 	void Draw(GameEngine *game, float gameTime){
-		drawpos.x = position.x+game->camera.getXPosition();
-		drawpos.y = position.y+game->camera.getYPosition();
+		drawpos.x = position.x*game->camera.getZoomLevel() +game->camera.getXPosition();
+		drawpos.y = position.y*game->camera.getZoomLevel() +game->camera.getYPosition();
 		sprite->Draw(&drawpos, game, gameTime, direction);
 	}
 

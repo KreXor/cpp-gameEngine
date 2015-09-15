@@ -1,6 +1,10 @@
 #include "Camera.h"
 
-
+void Camera::init(int w, int h)
+{
+    screen_height = h;
+    screen_width = w;
+}
 void Camera::reset()
 {
 	position.x = 0;
@@ -14,6 +18,13 @@ void Camera::setPosition(float x, float y)
 {
 	position.x = x;
 	position.y = y;
+
+}
+
+void Camera::setFocus(float x, float y)
+{
+    position.x = ((x*zoomLevel)*-1) + screen_width/2;
+	position.y = ((y*zoomLevel)*-1) + screen_height/2;
 
 }
 
