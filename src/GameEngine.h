@@ -35,9 +35,11 @@ public:
 	GraphicHelper graphicHelper;
 	SDL_Surface* screen;
 	SDL_Renderer* renderer;
+	SDL_Window* window;
 
 	int screenWidth;
 	int screenHeigth;
+
 
 	float millisecondFTime;
 

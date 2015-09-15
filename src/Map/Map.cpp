@@ -167,19 +167,23 @@ void Map::Draw(GameEngine* game)
 
 	for(int i = 0; i < this->tilesCount; i++)
 	{
-		rect.x = this->mapTilePosition[i].worldPosition.x*game->camera.getZoomLevel() + game->camera.getXPosition();
-		rect.y = this->mapTilePosition[i].worldPosition.y*game->camera.getZoomLevel() + game->camera.getYPosition();
-		rect.w = this->mapTilePosition[i].t_size*game->camera.getZoomLevel();
-		rect.h = this->mapTilePosition[i].t_size*game->camera.getZoomLevel();
+        //Make sure that we only draw what is on the screen
+        if(this->mapTilePosition[i].worldPosition.x*game->camera.getZoomLevel() > (game->camera.getXPosition()+400)*-1 && this->mapTilePosition[i].worldPosition.x*game->camera.getZoomLevel() < (game->camera.getXPosition()-(game->screenWidth))*-1
+        && this->mapTilePosition[i].worldPosition.y*game->camera.getZoomLevel() > (game->camera.getYPosition()+400)*-1 && this->mapTilePosition[i].worldPosition.y*game->camera.getZoomLevel() < (game->camera.getYPosition()-(game->screenHeigth))*-1)
+        {
+            rect.x = this->mapTilePosition[i].worldPosition.x*game->camera.getZoomLevel() + game->camera.getXPosition();
+            rect.y = this->mapTilePosition[i].worldPosition.y*game->camera.getZoomLevel() + game->camera.getYPosition();
+            rect.w = this->mapTilePosition[i].t_size*game->camera.getZoomLevel();
+            rect.h = this->mapTilePosition[i].t_size*game->camera.getZoomLevel();
 
-		rect2.x = mapTilePosition[i].imagePosition.x;
-		rect2.y = mapTilePosition[i].imagePosition.y;
-		rect2.w = this->mapTilePosition[i].t_size;
-		rect2.h = this->mapTilePosition[i].t_size;
+            rect2.x = mapTilePosition[i].imagePosition.x;
+            rect2.y = mapTilePosition[i].imagePosition.y;
+            rect2.w = this->mapTilePosition[i].t_size;
+            rect2.h = this->mapTilePosition[i].t_size;
 
-		SDL_RenderCopy(game->renderer, this->tilesImage[mapTilePosition[i].type], &rect2, &rect);
-
-		//SDL_BlitSurface( this->tilesImage[mapTilePosition[i].type], &rect2, game->screen, &rect);
+            SDL_RenderCopy(game->renderer, this->tilesImage[mapTilePosition[i].type], &rect2, &rect);
+            //SDL_RenderCopyEx(game->renderer, this->tilesImage[mapTilePosition[i].type], &rect2, &rect, 45, NULL, SDL_FLIP_NONE);
+        }
 	}
 }
 

@@ -32,7 +32,7 @@ void GameEngine::Init(const char* title, int width, int height,
 		flags = SDL_FULLSCREEN;
 	}*/
 
-	SDL_Window* window = SDL_CreateWindow("Maximized text",
+	window = SDL_CreateWindow("Maximized text",
                                       SDL_WINDOWPOS_UNDEFINED,
                                       SDL_WINDOWPOS_UNDEFINED,
                                       width,

@@ -1,11 +1,12 @@
 #include "GameEngine.h"
 #include "States/IntroState.h"
 #include "Player.h"
+#include <string>
 
 #define WIDTH 1280
 #define HEIGHT 1024
 
-#define TICK_INTERVAL 10
+#define TICK_INTERVAL 15
 
 Uint32 TimeLeft(void)
 {
@@ -32,10 +33,14 @@ int main ( int argc, char *argv[] )
 	current_time = SDL_GetTicks();
 
 	bool quit = true;
+    int ic = 0;
+
 
 	while ( quit )
 	{
-
+        ic++;
+        std::string tmp = std::to_string(ic/(SDL_GetTicks()/1000));
+        SDL_SetWindowTitle(game.window, tmp.c_str());
 		//Get time since last frame.
 		old_time = current_time;
 		current_time = SDL_GetTicks();
@@ -51,6 +56,8 @@ int main ( int argc, char *argv[] )
 
 		SDL_RenderPresent(game.renderer);
 		SDL_Delay(TimeLeft());
+
+
 	}
 
 	game.Cleanup();
