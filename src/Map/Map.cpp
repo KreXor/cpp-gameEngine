@@ -139,6 +139,7 @@ void Map::readMapData(GameEngine* game)
                     tile.imagePosition.x = document["type_legend"][type_id]["image_x"].GetInt();
                     tile.imagePosition.y = document["type_legend"][type_id]["image_y"].GetInt();
                     tile.type = 0;
+                    tile.blockid = type_id;
                     tile.layer = 0;
                     tile.boundingBoxType = 0;
                     tile.t_size = tile_size;
@@ -180,6 +181,7 @@ void Map::Draw(GameEngine* game)
             rect2.y = mapTilePosition[i].imagePosition.y;
             rect2.w = this->mapTilePosition[i].t_size;
             rect2.h = this->mapTilePosition[i].t_size;
+
 
             SDL_RenderCopy(game->renderer, this->tilesImage[mapTilePosition[i].type], &rect2, &rect);
             //SDL_RenderCopyEx(game->renderer, this->tilesImage[mapTilePosition[i].type], &rect2, &rect, 45, NULL, SDL_FLIP_NONE);

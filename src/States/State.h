@@ -2,6 +2,7 @@
 #define GAMESTATE_H
 
 #include "../GameEngine.h"
+#include "../EffectHandler.h"
 
 class State
 {

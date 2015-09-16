@@ -39,7 +39,7 @@ int main ( int argc, char *argv[] )
 	while ( quit )
 	{
         ic++;
-        std::string tmp = std::to_string(ic/(SDL_GetTicks()/1000));
+        std::string tmp = std::to_string((float)ic/(SDL_GetTicks()/1000));
         SDL_SetWindowTitle(game.window, tmp.c_str());
 		//Get time since last frame.
 		old_time = current_time;

@@ -35,6 +35,7 @@ private:
 
 	Player player;
 	Map worldmap;
+	EffectHandler effectHandler;
 	Physics physics;
 	InputHandler inputHandler;
 	static PlayingState m_PlayingState;

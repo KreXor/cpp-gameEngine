@@ -19,6 +19,7 @@ private:
 		int layer;
 		int type;
 		int t_size;
+		int blockid;
 		int boundingBoxType; // so we know if there is gound have a slope or note, see physics.c for more info.
 	};
 

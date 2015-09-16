@@ -18,6 +18,7 @@ void PlayingState::Init(GameEngine* game)
 	inputHandler.Init();
 	game->camera.reset();
 	game->camera.setPosition(-100,-100);
+	effectHandler.Init(game);
 	//game->camera.moveCameraTo(-1000,0,10000);
 }
 
@@ -46,39 +47,44 @@ void PlayingState::Update(GameEngine* game)
 {
 
 	game->camera.update(game->millisecondFTime);
+    Player tempPlayer = player;
 
 	if(inputHandler.keyRunRight.pressed == true){
-        player.position.x += player.movmentSpeed;
-        player.direction = 1;
-        player.sprite->SetCurrentBehaviour(2);
+        tempPlayer.position.x += tempPlayer.movmentSpeed;
+        tempPlayer.direction = 1;
+        tempPlayer.sprite->SetCurrentBehaviour(2);
         //game->camera.moveCameraTo(-150,0,1000);
     }
 
     else if(inputHandler.keyRunLeft.pressed == true){
-        player.position.x -= player.movmentSpeed;
-        player.direction = -1;
-        player.sprite->SetCurrentBehaviour(2);
+        tempPlayer.position.x -= tempPlayer.movmentSpeed;
+        tempPlayer.direction = -1;
+        tempPlayer.sprite->SetCurrentBehaviour(2);
 
         //game->camera.moveCameraTo(150,0,1000);
     }
     else if(inputHandler.keyRunUp.pressed == true){
-        player.position.y -= player.movmentSpeed;
-        player.direction = -1;
-        player.sprite->SetCurrentBehaviour(3);
+        tempPlayer.position.y -= tempPlayer.movmentSpeed;
+        tempPlayer.direction = -1;
+        tempPlayer.sprite->SetCurrentBehaviour(3);
 
     }
     else if(inputHandler.keyRunDown.pressed == true){
-        player.position.y += player.movmentSpeed;
-        player.direction = -1;
-        player.sprite->SetCurrentBehaviour(4);
+        tempPlayer.position.y += tempPlayer.movmentSpeed;
+        tempPlayer.direction = -1;
+        tempPlayer.sprite->SetCurrentBehaviour(4);
     }
     else
 	{
 		//game->camera.moveCameraTo(0,0,5000);
-		player.direction = 0;
-		player.sprite->SetCurrentBehaviour(1);
+		tempPlayer.direction = 0;
+		tempPlayer.sprite->SetCurrentBehaviour(1);
 	}
 
+    if(!physics.CheckPlayerCollision(tempPlayer, worldmap))
+    {
+        player = tempPlayer;
+    }
 }
 
 void PlayingState::Draw(GameEngine* game)
@@ -91,7 +97,7 @@ void PlayingState::Draw(GameEngine* game)
 	player.Draw(game, game->millisecondFTime);
 
 	game->camera.setFocus(player.position.x, player.position.y);
-
+    effectHandler.Draw(game);
 
 }
 

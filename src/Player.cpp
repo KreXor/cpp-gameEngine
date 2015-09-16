@@ -5,8 +5,8 @@ void Player::Initialize(GameEngine* game)
 {
 
 	this->movmentSpeed = 2;
-	this->position.x = 600;
-	this->position.y = 496;
+	this->position.x = 300;
+	this->position.y = 300;
 	AnimationReader ar("Data/animation.json");
 
 	this->sprite = ar.LoadAnimations("Data/animation.json", game);

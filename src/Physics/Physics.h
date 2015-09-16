@@ -11,10 +11,10 @@ class Physics {
 public:
 	void ApplyPhysics(Drawable player, Map map);
 	void ApplyPhysicsOnPlayer(Player* player, Map map);
-
+    bool CheckPlayerCollision(Player player, Map map);
 
 private:
-	void CheckPlayerCollision(Player* player, Map map);
+
 	bool CollideBoundingBox(SDL_Rect box1, SDL_Rect box2);
 };
 
