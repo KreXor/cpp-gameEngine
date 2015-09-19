@@ -1,6 +1,7 @@
 {
     
-    "tile_count": 10000,
+    "tile_width_count": 100,
+    "tile_height_count": 100,
     "tile_set": "Data/Tiles/Tiles.bmp",
     "tile_size": 48,
     

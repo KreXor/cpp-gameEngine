@@ -13,7 +13,55 @@ bool Physics::CheckPlayerCollision(Player player, Map map)
 
     SDL_Rect tileRect;
     SDL_Rect playerRect;
-    for(int i = 0; i < map.tilesCount; i++)
+
+    //Calculate where the camera is in the matrice
+
+	//get Y start postion
+	int render_y_start = floor(player.position.y/map.getTileSize())-2;
+	render_y_start = (render_y_start < 0) ? 0 : render_y_start;
+	render_y_start = (render_y_start > map.getTilesHeightCount()) ? map.getTilesHeightCount() : render_y_start;
+
+	//get Y start postion
+	int render_y_end = floor(player.position.y/map.getTileSize())+2;
+	render_y_end = (render_y_end < 0) ? 0: render_y_end;
+	render_y_end = (render_y_end > map.getTilesHeightCount()) ? map.getTilesHeightCount(): render_y_end;
+
+	//get X start postion
+	int render_x_start = floor(player.position.x/map.getTileSize())-2;
+	render_x_start = (render_x_start < 0) ? 0 : render_x_start;
+	render_x_start = (render_x_start > map.getTilesWidthCount()) ? map.getTilesWidthCount() : render_x_start;
+
+	//get X end postion
+	int render_x_end = floor(player.position.x/map.getTileSize())+2;
+	render_x_end = (render_x_end < 0) ? 0 : render_x_end;
+	render_x_end = (render_x_end > map.getTilesWidthCount()) ? map.getTilesWidthCount(): render_x_end;
+
+    for(int y = render_y_start; y < render_y_end; y++)
+    {
+        for(int x = render_x_start; x < render_x_end; x++)
+        {
+            if(map.mapTilePosition[y][x].blockid == 5 || map.mapTilePosition[y][x].blockid == 6)
+            {
+                tileRect.x = map.mapTilePosition[y][x].worldPosition.x;
+                tileRect.y = map.mapTilePosition[y][x].worldPosition.y;
+                tileRect.w = map.getTileSize()/2;
+                tileRect.h = map.getTileSize()/2;
+
+                playerRect.x = player.position.x-17;
+                playerRect.y = player.position.y+22;
+                playerRect.w = 34;
+                playerRect.h = 30;
+
+                if(CollideBoundingBox(playerRect, tileRect))
+                {
+                    return true;
+                }
+            }
+        }
+    }
+
+    return false;
+ /*   for(int i = 0; i < map.tilesCount; i++)
 	{
         if(map.mapTilePosition[i].blockid == 5 || map.mapTilePosition[i].blockid == 6)
         {
@@ -32,7 +80,7 @@ bool Physics::CheckPlayerCollision(Player player, Map map)
                 return true;
             }
 		}
-    }
+    }*/
     return false;
 
 }

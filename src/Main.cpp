@@ -6,7 +6,7 @@
 #define WIDTH 1280
 #define HEIGHT 1024
 
-#define TICK_INTERVAL 15
+#define TICK_INTERVAL 0
 
 Uint32 TimeLeft(void)
 {

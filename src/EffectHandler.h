@@ -7,6 +7,8 @@
 #include <string.h>
 #include <cstdlib>
 #include <fstream>
+#include "Map/Map.h"
+#include "Player.h"
 
 class EffectHandler
 {
@@ -14,7 +16,7 @@ class EffectHandler
 private:
     SDL_Texture *lightTexture;
 public:
-	void Draw(GameEngine* game);
+	void Draw(GameEngine* game, Map map, Player player);
 	void Init(GameEngine* game);
 
 };

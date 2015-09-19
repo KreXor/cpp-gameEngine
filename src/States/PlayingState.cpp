@@ -97,7 +97,7 @@ void PlayingState::Draw(GameEngine* game)
 	player.Draw(game, game->millisecondFTime);
 
 	game->camera.setFocus(player.position.x, player.position.y);
-    effectHandler.Draw(game);
+    effectHandler.Draw(game, this->worldmap, this->player);
 
 }
 

@@ -18,24 +18,26 @@ private:
 		SDL_Rect imagePosition;
 		int layer;
 		int type;
-		int t_size;
 		int blockid;
 		int boundingBoxType; // so we know if there is gound have a slope or note, see physics.c for more info.
 	};
 
 	SDL_Texture* tilesImage[10];
-
-
-
 	SDL_Texture *Load_image( string filename, GameEngine* game );
+	int tile_size;
+	int tiles_width_count;
+	int tiles_heigth_count;
 
 	void readMapData(GameEngine* game);
 
 public:
-	int tilesCount;
-	Tile* mapTilePosition;
+
+	Tile** mapTilePosition;
 	void LoadMap(GameEngine* game);
 	void Draw(GameEngine* game);
+	int getTileSize();
+	int getTilesHeightCount();
+    int getTilesWidthCount();
 
 
 
