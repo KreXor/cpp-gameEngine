@@ -3,23 +3,13 @@
 #include <math.h>
 #include <vector>
 
-// Swap the values of A and B
-void Swap(int *a, int *b) {
-    int *c = a;
-    a = b;
-    b = c;
-}
-
 struct Position{
 		int x;
 		int y;
 	};
 
-// Returns the list of points from (x0, y0) to (x1, y1)
-vector<Position> BresenhamLine(int x0, int y0, int x1, int y1) {
-    // Optimization: it would be preferable to calculate in
-    // advance the size of "result" and to use a fixed-size array
-    // instead of a list.
+vector<Position> bresenhamLine(int x0, int y0, int x1, int y1) {
+
     vector<Position> result;
 
     bool steep = abs(y1 - y0) > abs(x1 - x0);
@@ -75,6 +65,44 @@ vector<Position> BresenhamLine(int x0, int y0, int x1, int y1) {
     return result;
 }
 
+bool raycast(int x0, int y0, int x1, int y1, Map map)
+{
+    vector<Position> ray;
+
+    ray = bresenhamLine(y0, x0, y1, x1);
+
+
+    if(ray[0].y == y0 && ray[0].x == x0)
+    {
+
+        for(int j = 0; j < ray.size(); j++)
+        {
+
+            if(map.mapTilePosition[ray[j].y/map.getTileSize()][ray[j].x/map.getTileSize()].blockid == 5 || map.mapTilePosition[ray[j].y/map.getTileSize()][ray[j].x/map.getTileSize()].blockid == 6)
+            {
+                return false;
+                break;
+            }
+        }
+    }
+    else
+    {
+        for(int j = ray.size()-1; j >= 0 ; j--)
+        {
+
+            if(map.mapTilePosition[ray[j].y/map.getTileSize()][ray[j].x/map.getTileSize()].blockid == 5 || map.mapTilePosition[ray[j].y/map.getTileSize()][ray[j].x/map.getTileSize()].blockid == 6)
+            {
+
+                return false;
+                break;
+            }
+        }
+
+    }
+
+    return true;
+}
+
 SDL_Texture *Load_image2( string filename, GameEngine* game )
 {
 	SDL_Surface* loaded_image = NULL;
@@ -121,21 +149,10 @@ void fillTexture(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Texture *ligh
     SDL_RenderCopy(renderer, lightTexture , NULL, &rect);
 }
 
-bool CollideBoundingBox(SDL_Rect box1, SDL_Rect box2)
-{
-	if(box1.x + box1.w > box2.x && box1.x <box2.x + box2.w)
-		if(box1.y + box1.h > box2.y && box1.y < box2.y + box2.h)
-			return true;
-
-	return false;
-
-
-}
-
 
 void calculateLightSource(GameEngine* game, SDL_Texture *texture, Map map, int source_x, int source_ys, Player player)
 {
-/*    SDL_SetRenderTarget(game->renderer, texture);
+    SDL_SetRenderTarget(game->renderer, texture);
     SDL_SetRenderDrawBlendMode(game->renderer, SDL_BLENDMODE_NONE);
 
 
@@ -144,22 +161,22 @@ void calculateLightSource(GameEngine* game, SDL_Texture *texture, Map map, int s
 
     SDL_SetRenderDrawColor(game->renderer, 255, 255, 255, 255);
 
-    int render_y_start = floor(player.position.y/map.getTileSize())-10;
+    int render_y_start = floor(player.position.y/map.getTileSize())-8;
 	render_y_start = (render_y_start < 0) ? 0 : render_y_start;
 	render_y_start = (render_y_start > map.getTilesHeightCount()) ? map.getTilesHeightCount() : render_y_start;
 
 	//get Y start postion
-	int render_y_end = floor(player.position.y/map.getTileSize())+10;
+	int render_y_end = floor(player.position.y/map.getTileSize())+8;
 	render_y_end = (render_y_end < 0) ? 0: render_y_end;
 	render_y_end = (render_y_end > map.getTilesHeightCount()) ? map.getTilesHeightCount(): render_y_end;
 
 	//get X start postion
-	int render_x_start = floor(player.position.x/map.getTileSize())-10;
+	int render_x_start = floor(player.position.x/map.getTileSize())-8;
 	render_x_start = (render_x_start < 0) ? 0 : render_x_start;
 	render_x_start = (render_x_start > map.getTilesWidthCount()) ? map.getTilesWidthCount() : render_x_start;
 
 	//get X end postion
-	int render_x_end = floor(player.position.x/map.getTileSize())+10;
+	int render_x_end = floor(player.position.x/map.getTileSize())+8;
 	render_x_end = (render_x_end < 0) ? 0 : render_x_end;
 	render_x_end = (render_x_end > map.getTilesWidthCount()) ? map.getTilesWidthCount(): render_x_end;
 	//Render all tiles on screen
@@ -169,22 +186,31 @@ void calculateLightSource(GameEngine* game, SDL_Texture *texture, Map map, int s
     {
         for(int x = render_x_start; x < render_x_end; x++)
         {
+
+
             vector<Position> ray;
 
-            if(floor((player.position.y+50)/map.getTileSize())<y && floor((player.position.x+15)/map.getTileSize())<x)
+
+            int player_pos_x = player.position.x+15; //floor((player.position.x+15)/map.getTileSize());
+            int player_pos_y = player.position.y+48; //floor((player.position.y+50)/map.getTileSize());
+
+            ray = bresenhamLine(player_pos_y, player_pos_x, y*map.getTileSize(),x*map.getTileSize());
+
+
+            if(ray[0].y == player_pos_y && ray[0].x == player_pos_x)
             {
-                ray = BresenhamLine(floor((player.position.y+50)/map.getTileSize()),floor((player.position.x+15)/map.getTileSize()), y, x);
 
                 for(int j = 0; j < ray.size(); j++)
                 {
 
-                    if(map.mapTilePosition[ray[j].y][ray[j].x].blockid == 5 || map.mapTilePosition[ray[j].y][ray[j].x].blockid == 6)
+                    if(map.mapTilePosition[ray[j].y/map.getTileSize()][ray[j].x/map.getTileSize()].blockid == 5 || map.mapTilePosition[ray[j].y/map.getTileSize()][ray[j].x/map.getTileSize()].blockid == 6)
                     {
                         SDL_RenderDrawLine(game->renderer,
+
+                                        ray[j].x+game->camera.getXPosition(),
+                                        ray[j].y+game->camera.getYPosition(),
                                         player.position.x+15+game->camera.getXPosition(),
-                                        player.position.y+50+game->camera.getYPosition(),
-                                        ray[j].x*map.getTileSize()+game->camera.getXPosition(),
-                                        ray[j].y*map.getTileSize()+game->camera.getYPosition());
+                                        player.position.y+50+game->camera.getYPosition());
 
                         Position pos;
                         pos.x = ray[j].x;
@@ -196,21 +222,21 @@ void calculateLightSource(GameEngine* game, SDL_Texture *texture, Map map, int s
                     }
                 }
             }
-            else if(floor((player.position.y+50)/map.getTileSize())>y && floor((player.position.x+15)/map.getTileSize())>x)
+            else
             {
-                ray = BresenhamLine(floor((player.position.y+50)/map.getTileSize()),floor((player.position.x+15)/map.getTileSize()), y, x);
-
-                for(int j = ray.size()-1; j >0; j--)
+                for(int j = ray.size()-1; j >= 0 ; j--)
                 {
 
-                    if(map.mapTilePosition[ray[j].y][ray[j].x].blockid == 5 || map.mapTilePosition[ray[j].y][ray[j].x].blockid == 6)
+                    if(map.mapTilePosition[ray[j].y/map.getTileSize()][ray[j].x/map.getTileSize()].blockid == 5 || map.mapTilePosition[ray[j].y/map.getTileSize()][ray[j].x/map.getTileSize()].blockid == 6)
                     {
                         SDL_RenderDrawLine(game->renderer,
+
+                                        ray[j].x+game->camera.getXPosition(),
+                                        ray[j].y+game->camera.getYPosition(),
                                         player.position.x+15+game->camera.getXPosition(),
-                                        player.position.y+50+game->camera.getYPosition(),
-                                        ray[j].x*map.getTileSize()+game->camera.getXPosition(),
-                                        ray[j].y*map.getTileSize()+game->camera.getYPosition());
-                         Position pos;
+                                        player.position.y+50+game->camera.getYPosition());
+
+                        Position pos;
                         pos.x = ray[j].x;
                         pos.y = ray[j].y;
                         lightPos.push_back(pos);
@@ -223,15 +249,14 @@ void calculateLightSource(GameEngine* game, SDL_Texture *texture, Map map, int s
             }
 
 
-
         }
 
     }
 
     for(int i = 0; i < lightPos.size()-1; i++)
     {
-        filledTrigonColor(game->renderer,player.position.x+15+game->camera.getXPosition(), player.position.y+50+game->camera.getYPosition(), lightPos[i].x*map.getTileSize()+game->camera.getXPosition(), lightPos[i].y*map.getTileSize()+game->camera.getYPosition(), lightPos[i+1].x*map.getTileSize()+game->camera.getXPosition(), lightPos[i+1].y*map.getTileSize()+game->camera.getYPosition(), 0xFFFFFFFF);
-    }*/
+        //filledTrigonColor(game->renderer,player.position.x+15+game->camera.getXPosition(), player.position.y+50+game->camera.getYPosition(), lightPos[i].x+game->camera.getXPosition(), lightPos[i].y+game->camera.getYPosition(), lightPos[i+1].x+game->camera.getXPosition(), lightPos[i+1].y+game->camera.getYPosition(), 0xFFFFFFFF);
+    }
 }
 void prepareForRendering(SDL_Renderer *renderer)
 {
@@ -263,8 +288,8 @@ void EffectHandler::Draw(GameEngine* game, Map map, Player player)
     SDL_SetTextureBlendMode(redTexture, SDL_BLENDMODE_MOD );
 
 
-    fillTexture(game->renderer, redTexture, lightTexture);
-
+    //fillTexture(game->renderer, redTexture, lightTexture);
+    calculateLightSource(game, redTexture, map, 0, 0, player);
     prepareForRendering(game->renderer);
 
 
