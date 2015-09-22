@@ -1,7 +1,5 @@
 #include "Map.h"
-#include <iostream>
-#include "rapidjson/document.h"
-#include <math.h>
+
 using namespace rapidjson;
 
 
@@ -10,6 +8,7 @@ void Map::LoadMap(GameEngine* game)
 
 	//this->tilesImage =  Load_image( "Data\\Tiles\\tiles.bmp" );
 	this->readMapData(game);
+	this->calculateLightPoints();
 
 
 }
@@ -261,4 +260,113 @@ int Map::getTilesHeightCount()
 int Map::getTilesWidthCount()
 {
     return this->tiles_width_count;
+}
+
+bool Map::isWall(Tile tile)
+{
+    if(tile.blockid == 5 || tile.blockid == 6)
+        return true;
+
+    return false;
+}
+
+void Map::calculateLightPoints()
+{
+	for(int y = 0; y < this->getTilesHeightCount(); y++)
+	{
+		for(int x = 0; x < this->getTilesWidthCount(); x++)
+		{
+			if(this->isWall(this->mapTilePosition[y][x]))
+			{
+				bool n, e, s, w;
+
+				n = this->isWall(this->mapTilePosition[y-1][x]);
+				e = this->isWall(this->mapTilePosition[y][x+1]);
+				s = this->isWall(this->mapTilePosition[y+1][x]);
+				w = this->isWall(this->mapTilePosition[y][x-1]);
+
+				//#
+				if((!n && !e && !s && !w) || (n && e && s && w))
+				{
+					addLightPointToCorner(this->mapTilePosition[y][x], 0);
+					addLightPointToCorner(this->mapTilePosition[y][x], 1);
+					addLightPointToCorner(this->mapTilePosition[y][x], 2);
+					addLightPointToCorner(this->mapTilePosition[y][x], 3);
+				}
+				//|  	-#-
+				//#   	 |
+				else if((n && !e && !s && !w) || (!n && e && s && w))
+				{
+					addLightPointToCorner(this->mapTilePosition[y][x], 2);
+					addLightPointToCorner(this->mapTilePosition[y][x], 3);
+				}
+				//		 |
+				//#-	-#
+				//		 |
+				else if((!n && e && !s && !w) || (n && !e && s && w))
+				{
+					addLightPointToCorner(this->mapTilePosition[y][x], 0);
+					addLightPointToCorner(this->mapTilePosition[y][x], 2);
+				}
+				//#		 |
+				//|		-#-
+				else if((!n && !e && s && !w) || (!n && e && s && w))
+				{
+					addLightPointToCorner(this->mapTilePosition[y][x], 0);
+					addLightPointToCorner(this->mapTilePosition[y][x], 1);
+				}
+				//		|
+				//-#	#-
+				//		|
+				else if((!n && !e && !s && w) || (n && e && s && !w))
+				{
+					addLightPointToCorner(this->mapTilePosition[y][x], 1);
+					addLightPointToCorner(this->mapTilePosition[y][x], 3);
+				}
+
+				//|		-#
+				//#-	 |
+				else if((n && e && !s && !w) || (!n && !e && s && w))
+				{
+					addLightPointToCorner(this->mapTilePosition[y][x], 1);
+					addLightPointToCorner(this->mapTilePosition[y][x], 2);
+				}
+				//#-	 |
+				//|		-#
+				else if((!n && e && s && !w) ||(n && !e && !s && w))
+				{
+					addLightPointToCorner(this->mapTilePosition[y][x], 0);
+					addLightPointToCorner(this->mapTilePosition[y][x], 3);
+				}
+			}
+		}
+	}
+}
+
+
+//0 = top-left
+//1 = top-right
+//2 = bottom-left
+//3 = bottom-right
+void Map::addLightPointToCorner(Tile tile, int corner)
+{
+	if(corner == 0)
+		addLightPoint(tile.worldPosition.x-1, tile.worldPosition.y-1);
+
+	else if(corner == 1)
+		addLightPoint(tile.worldPosition.x+this->getTileSize()+1, tile.worldPosition.y-1);
+
+	else if(corner == 2)
+		addLightPoint(tile.worldPosition.x-1, tile.worldPosition.y+this->getTileSize()+1);
+
+	else if(corner == 3)
+		addLightPoint(tile.worldPosition.x+this->getTileSize()+1, tile.worldPosition.y+this->getTileSize()+1);
+}
+
+void Map::addLightPoint(int x, int y)
+{
+	Position pos;
+	pos.x = x;
+	pos.y =	y;
+	this->lightPoints.push_back(pos);
 }

@@ -7,11 +7,19 @@
 #include <string.h>
 #include <cstdlib>
 #include <fstream>
+#include <iostream>
+#include "rapidjson/document.h"
+#include <math.h>
+#include <vector>
 
 class Map
 {
 
 private:
+    struct Position{
+		float x;
+		float y;
+	};
 
 	struct Tile{
 		SDL_Rect worldPosition;
@@ -28,9 +36,15 @@ private:
 	int tiles_width_count;
 	int tiles_heigth_count;
 
+
+    void calculateLightPoints();
+    void addLightPoint(int x, int y);
+    void addLightPointToCorner(Tile tile, int corner);
+
 	void readMapData(GameEngine* game);
 
 public:
+
 
 	Tile** mapTilePosition;
 	void LoadMap(GameEngine* game);
@@ -38,8 +52,8 @@ public:
 	int getTileSize();
 	int getTilesHeightCount();
     int getTilesWidthCount();
-
-
+    bool isWall(Tile tile);
+    vector<Position> lightPoints;
 
 };
 

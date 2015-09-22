@@ -2,6 +2,7 @@
 #include "SDL2/SDL2_gfxPrimitives.h"
 #include <math.h>
 #include <vector>
+#include "Utils/Vector2.h"
 
 struct Position{
 		int x;
@@ -150,100 +151,152 @@ void fillTexture(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Texture *ligh
 }
 
 
+
+bool lessCoord(int x0, int y0, int x1, int y1, int cx, int cy)
+{
+    if (x0 - cx >= 0 && x1 - cx < 0)
+        return true;
+    if (x0 - cx < 0 && x1 - cx >= 0)
+        return false;
+    if (x0- cx == 0 && x1 - cx == 0) {
+        if (y0 - cy >= 0 || y1 - cy >= 0)
+            return y0 > y1;
+        return y1 > y0;
+    }
+
+    // compute the cross product of vectors (center -> a) x (center -> b)
+    int det = (x0 - cx) * (y1 - cy) - (x1 - cx) * (y0 - cy);
+    if (det < 2)
+        return true;
+    if (det > 2)
+        return false;
+
+    // points a and b are on the same line from the center
+    // check which point is closer to the center
+    int d1 = (x0 - cx) * (x0 - cx) + (y0 - cy) * (y0 - cy);
+    int d2 = (x1 - cx) * (x1 - cx) + (y1 - cy) * (y1 - cy);
+    return d1 > d2;
+
+
+
+
+}
+
 void calculateLightSource(GameEngine* game, SDL_Texture *texture, Map map, int source_x, int source_ys, Player player)
 {
     SDL_SetRenderTarget(game->renderer, texture);
     SDL_SetRenderDrawBlendMode(game->renderer, SDL_BLENDMODE_NONE);
 
 
-    SDL_SetRenderDrawColor(game->renderer, 30, 30, 30, 255);
+    SDL_SetRenderDrawColor(game->renderer, 50, 50, 50, 255);
     SDL_RenderFillRect(game->renderer, NULL);
 
     SDL_SetRenderDrawColor(game->renderer, 255, 255, 255, 255);
 
-    int render_y_start = floor(player.position.y/map.getTileSize())-8;
-	render_y_start = (render_y_start < 0) ? 0 : render_y_start;
-	render_y_start = (render_y_start > map.getTilesHeightCount()) ? map.getTilesHeightCount() : render_y_start;
 
-	//get Y start postion
-	int render_y_end = floor(player.position.y/map.getTileSize())+8;
-	render_y_end = (render_y_end < 0) ? 0: render_y_end;
-	render_y_end = (render_y_end > map.getTilesHeightCount()) ? map.getTilesHeightCount(): render_y_end;
-
-	//get X start postion
-	int render_x_start = floor(player.position.x/map.getTileSize())-8;
-	render_x_start = (render_x_start < 0) ? 0 : render_x_start;
-	render_x_start = (render_x_start > map.getTilesWidthCount()) ? map.getTilesWidthCount() : render_x_start;
-
-	//get X end postion
-	int render_x_end = floor(player.position.x/map.getTileSize())+8;
-	render_x_end = (render_x_end < 0) ? 0 : render_x_end;
-	render_x_end = (render_x_end > map.getTilesWidthCount()) ? map.getTilesWidthCount(): render_x_end;
-	//Render all tiles on screen
+	int length = 800;
 
 	vector<Position> lightPos;
-    for(int y = render_y_start; y < render_y_end; y++)
-    {
-        for(int x = render_x_start; x < render_x_end; x++)
-        {
+
+    int player_pos_x = player.position.x+15;
+    int player_pos_y = player.position.y+48;
 
 
-            vector<Position> ray;
+	for(int i = 0; i < map.lightPoints.size(); i++)
+	{
 
 
-            int player_pos_x = player.position.x+15; //floor((player.position.x+15)/map.getTileSize());
-            int player_pos_y = player.position.y+48; //floor((player.position.y+50)/map.getTileSize());
 
-            ray = bresenhamLine(player_pos_y, player_pos_x, y*map.getTileSize(),x*map.getTileSize());
+		Vector2 lightVector((float)(map.lightPoints[i].x - player_pos_x), (float)(map.lightPoints[i].y - player_pos_y));
+
+		if(lightVector.Length() < length)
+		{
+			lightVector = lightVector.Normalize();
+
+			vector<Position> ray;
+
+            ray = bresenhamLine(player_pos_y, player_pos_x, (lightVector.Y*length)+player_pos_y, (lightVector.X*length)+player_pos_x);
+
 
 
             if(ray[0].y == player_pos_y && ray[0].x == player_pos_x)
             {
 
+                bool passedLightPoint = false;
                 for(int j = 0; j < ray.size(); j++)
                 {
+                    int x = ray[j].x;
+                    int y = ray[j].y;
 
-                    if(map.mapTilePosition[ray[j].y/map.getTileSize()][ray[j].x/map.getTileSize()].blockid == 5 || map.mapTilePosition[ray[j].y/map.getTileSize()][ray[j].x/map.getTileSize()].blockid == 6)
+                    if(map.isWall(map.mapTilePosition[y/map.getTileSize()][x/map.getTileSize()]) && !passedLightPoint)
                     {
-                        SDL_RenderDrawLine(game->renderer,
-
-                                        ray[j].x+game->camera.getXPosition(),
-                                        ray[j].y+game->camera.getYPosition(),
-                                        player.position.x+15+game->camera.getXPosition(),
-                                        player.position.y+50+game->camera.getYPosition());
-
+                        break;
+                    }
+                    else if(ray[j].y == map.lightPoints[i].y && ray[j].x == map.lightPoints[i].x)
+                    {
                         Position pos;
                         pos.x = ray[j].x;
                         pos.y = ray[j].y;
                         lightPos.push_back(pos);
+                        passedLightPoint = true;
 
-                        break;
-
+                        if(map.isWall(map.mapTilePosition[ray[j+1].y/map.getTileSize()][ray[j+1].x/map.getTileSize()]))
+                            break;
                     }
+
+                    else if(passedLightPoint)
+                    {
+                        if(map.isWall(map.mapTilePosition[y/map.getTileSize()][x/map.getTileSize()]))
+                        {
+                            Position pos;
+                            pos.x = ray[j].x;
+                            pos.y = ray[j].y;
+                            lightPos.push_back(pos);
+                            break;
+
+                        }
+                    }
+
                 }
             }
             else
             {
+                bool passedLightPoint = false;
                 for(int j = ray.size()-1; j >= 0 ; j--)
                 {
+                    int x = ray[j].x;
+                    int y = ray[j].y;
 
-                    if(map.mapTilePosition[ray[j].y/map.getTileSize()][ray[j].x/map.getTileSize()].blockid == 5 || map.mapTilePosition[ray[j].y/map.getTileSize()][ray[j].x/map.getTileSize()].blockid == 6)
+                    if(map.isWall(map.mapTilePosition[y/map.getTileSize()][x/map.getTileSize()]) && !passedLightPoint)
                     {
-                        SDL_RenderDrawLine(game->renderer,
-
-                                        ray[j].x+game->camera.getXPosition(),
-                                        ray[j].y+game->camera.getYPosition(),
-                                        player.position.x+15+game->camera.getXPosition(),
-                                        player.position.y+50+game->camera.getYPosition());
+                        break;
+                    }
+                    else if(ray[j].y == map.lightPoints[i].y && ray[j].x == map.lightPoints[i].x)
+                    {
 
                         Position pos;
-                        pos.x = ray[j].x;
-                        pos.y = ray[j].y;
+                        pos.x = x;
+                        pos.y = y;
                         lightPos.push_back(pos);
 
-                        break;
-
+                        passedLightPoint = true;
+                        if(map.isWall(map.mapTilePosition[ray[j+1].y/map.getTileSize()][ray[j+1].x/map.getTileSize()]))
+                            break;
                     }
+
+                    else if(passedLightPoint)
+                    {
+                        if(map.isWall(map.mapTilePosition[y/map.getTileSize()][x/map.getTileSize()]))
+                        {
+                            Position pos;
+                            pos.x = x;
+                            pos.y = y;
+                            lightPos.push_back(pos);
+                            break;
+
+                        }
+                    }
+
                 }
 
             }
@@ -253,9 +306,53 @@ void calculateLightSource(GameEngine* game, SDL_Texture *texture, Map map, int s
 
     }
 
-    for(int i = 0; i < lightPos.size()-1; i++)
+
+    int cx = 0;
+    int cy = 0;
+
+    cx = player.position.x;
+    cy = player.position.y;
+
+    for(int i = 0; i < lightPos.size(); i++)
     {
-        //filledTrigonColor(game->renderer,player.position.x+15+game->camera.getXPosition(), player.position.y+50+game->camera.getYPosition(), lightPos[i].x+game->camera.getXPosition(), lightPos[i].y+game->camera.getYPosition(), lightPos[i+1].x+game->camera.getXPosition(), lightPos[i+1].y+game->camera.getYPosition(), 0xFFFFFFFF);
+        for(int j = 0; j < lightPos.size()-1; j++)
+        {
+            if(lessCoord(lightPos[j+1].x, lightPos[j+1].y, lightPos[j].x, lightPos[j].y , cx, cy))
+            {
+                Position tempPos = lightPos[j];             // swap elements
+                lightPos[j] = lightPos[j+1];
+                lightPos[j+1] = tempPos;
+
+            }
+
+        }
+
+    }
+
+
+    for(int i = 0; i < lightPos.size(); i++)
+    {
+
+    //int i = 5;
+
+                        SDL_RenderDrawLine(game->renderer,
+
+                                        lightPos[i].x+game->camera.getXPosition(),
+                                        lightPos[i].y+game->camera.getYPosition(),
+                                        player.position.x+15+game->camera.getXPosition(),
+                                        player.position.y+50+game->camera.getYPosition());
+/*
+        int p = i+1;
+        if(p == lightPos.size())
+            p = 0;
+        filledTrigonColor(game->renderer,
+                        player_pos_x+game->camera.getXPosition(),
+                        player_pos_y+game->camera.getYPosition(),
+                        lightPos[i].x+game->camera.getXPosition(),
+                        lightPos[i].y+game->camera.getYPosition(),
+                        lightPos[p].x+game->camera.getXPosition(),
+                        lightPos[p].y+game->camera.getYPosition(),
+                        0xFFFFFFFF);*/
     }
 }
 void prepareForRendering(SDL_Renderer *renderer)

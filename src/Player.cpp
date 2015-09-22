@@ -4,7 +4,7 @@
 void Player::Initialize(GameEngine* game)
 {
 
-	this->movmentSpeed = 2;
+	this->movmentSpeed = 8;
 	this->position.x = 300;
 	this->position.y = 300;
 	AnimationReader ar("Data/animation.json");
