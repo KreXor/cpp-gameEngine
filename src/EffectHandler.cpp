@@ -219,87 +219,56 @@ void calculateLightSource(GameEngine* game, SDL_Texture *texture, Map map, int s
 
 
 
-            if(ray[0].y == player_pos_y && ray[0].x == player_pos_x)
-            {
+            bool passedLightPoint = false;
+			int j = 0;
 
-                bool passedLightPoint = false;
-                for(int j = 0; j < ray.size(); j++)
-                {
-                    int x = ray[j].x;
-                    int y = ray[j].y;
+            j = (ray[0].y == player_pos_y && ray[0].x == player_pos_x) ? 0 : ray.size()-1;
 
-                    if(map.isWall(map.mapTilePosition[y/map.getTileSize()][x/map.getTileSize()]) && !passedLightPoint)
-                    {
-                        break;
-                    }
-                    else if(ray[j].y == map.lightPoints[i].y && ray[j].x == map.lightPoints[i].x)
-                    {
-                        Position pos;
-                        pos.x = ray[j].x;
-                        pos.y = ray[j].y;
-                        lightPos.push_back(pos);
-                        passedLightPoint = true;
+			while(true)
+			{
+				int x = ray[j].x;
+				int y = ray[j].y;
 
-                        if(map.isWall(map.mapTilePosition[ray[j+1].y/map.getTileSize()][ray[j+1].x/map.getTileSize()]))
-                            break;
-                    }
+				if(map.isWall(map.mapTilePosition[y/map.getTileSize()][x/map.getTileSize()]) && !passedLightPoint)
+				{
+					break;
+				}
+				else if(ray[j].y == map.lightPoints[i].y && ray[j].x == map.lightPoints[i].x)
+				{
+					Position pos;
+					pos.x = ray[j].x;
+					pos.y = ray[j].y;
+					lightPos.push_back(pos);
+					passedLightPoint = true;
 
-                    else if(passedLightPoint)
-                    {
-                        if(map.isWall(map.mapTilePosition[y/map.getTileSize()][x/map.getTileSize()]))
-                        {
-                            Position pos;
-                            pos.x = ray[j].x;
-                            pos.y = ray[j].y;
-                            lightPos.push_back(pos);
-                            break;
+					if(map.isWall(map.mapTilePosition[ray[j+1].y/map.getTileSize()][ray[j+1].x/map.getTileSize()]))
+						break;
+				}
 
-                        }
-                    }
+				else if(passedLightPoint)
+				{
+					if(map.isWall(map.mapTilePosition[y/map.getTileSize()][x/map.getTileSize()]))
+					{
+						Position pos;
+						pos.x = ray[j].x;
+						pos.y = ray[j].y;
+						lightPos.push_back(pos);
+						break;
 
-                }
-            }
-            else
-            {
-                bool passedLightPoint = false;
-                for(int j = ray.size()-1; j >= 0 ; j--)
-                {
-                    int x = ray[j].x;
-                    int y = ray[j].y;
+					}
+				}
 
-                    if(map.isWall(map.mapTilePosition[y/map.getTileSize()][x/map.getTileSize()]) && !passedLightPoint)
-                    {
-                        break;
-                    }
-                    else if(ray[j].y == map.lightPoints[i].y && ray[j].x == map.lightPoints[i].x)
-                    {
-
-                        Position pos;
-                        pos.x = x;
-                        pos.y = y;
-                        lightPos.push_back(pos);
-
-                        passedLightPoint = true;
-                        if(map.isWall(map.mapTilePosition[ray[j+1].y/map.getTileSize()][ray[j+1].x/map.getTileSize()]))
-                            break;
-                    }
-
-                    else if(passedLightPoint)
-                    {
-                        if(map.isWall(map.mapTilePosition[y/map.getTileSize()][x/map.getTileSize()]))
-                        {
-                            Position pos;
-                            pos.x = x;
-                            pos.y = y;
-                            lightPos.push_back(pos);
-                            break;
-
-                        }
-                    }
-
-                }
-
-            }
+				if(ray[0].y == player_pos_y && ray[0].x == player_pos_x)
+				{
+					j++;
+					if(j >= ray.size()) break;
+				}
+				else
+				{
+					j--;
+					if(j < 0) break;
+				}
+			}
 
 
         }
@@ -391,6 +360,7 @@ void EffectHandler::Draw(GameEngine* game, Map map, Player player)
 
 
     SDL_RenderCopy(game->renderer, redTexture, NULL, NULL);
+
 
     SDL_DestroyTexture(redTexture);
     redTexture = NULL;

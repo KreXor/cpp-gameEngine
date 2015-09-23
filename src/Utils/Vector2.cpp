@@ -30,3 +30,19 @@ Vector2 Vector2::Normalize(){
 Vector2::~Vector2(void)
 {
 }
+
+float Vector2::Direction()
+{
+	if(X >= 0 && Y >= 0)
+		return atan(Y/X);
+
+	if(X < 0 && Y >= 0)
+		return 90+(atan(Y/X));
+
+	if(X < 0 && Y < 0)
+		return 180+(atan(Y/X));
+
+	if(X >= 0 && Y < 0)
+		return 270+(atan(Y/X));
+
+}

@@ -18,7 +18,7 @@ void PlayingState::Init(GameEngine* game)
 	inputHandler.Init();
 	game->camera.reset();
 	game->camera.setPosition(-100,-100);
-	effectHandler.Init(game);
+	lightning.Init(game);
 	//game->camera.moveCameraTo(-1000,0,10000);
 }
 
@@ -97,7 +97,7 @@ void PlayingState::Draw(GameEngine* game)
 	player.Draw(game, game->millisecondFTime);
 
 	game->camera.setFocus(player.position.x, player.position.y);
-    effectHandler.Draw(game, this->worldmap, this->player);
+    lightning.Draw(game, this->worldmap, this->player);
 
 }
 

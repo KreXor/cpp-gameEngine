@@ -6,6 +6,7 @@
 #include "../Player.h"
 #include "../Map/Map.h"
 #include "../Physics/Physics.h"
+#include "../Physics/Lightning.h"
 #include "../InputHandler.h"
 
 class PlayingState : public State
@@ -35,7 +36,7 @@ private:
 
 	Player player;
 	Map worldmap;
-	EffectHandler effectHandler;
+	Lightning lightning;
 	Physics physics;
 	InputHandler inputHandler;
 	static PlayingState m_PlayingState;

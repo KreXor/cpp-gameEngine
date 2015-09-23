@@ -10,6 +10,7 @@ public:
     ~Vector2(void);
     float Length();
     Vector2 Normalize();
+	float Direction();
     float X,Y;
 };
 
